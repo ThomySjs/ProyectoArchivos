@@ -18,7 +18,7 @@ struct Alumno{
 };
 
 void Lectura();
-void Menu(string, string);
+void Menu();
 void Login(string, string);
 void MenuPr(string);
 void CargarLista(string, ofstream[], Alumno[]);
@@ -31,20 +31,20 @@ int main(){
     Alumno alumnos[100];
     string nombrearchivo;
     int i=0;
-    string Usuario, Contraseña;
     
     fs::create_directory("Usuarios"); //Crear una carpeta para los usuarios registrados
 
 
-    Menu(Usuario, Contraseña); //Menu de login o registro
+    Menu(); //Menu de login o registro
 
 
     return 0;
 }
 
-void Menu(string Usuario, string Contraseña){
+void Menu(){
     ifstream Cuentas;
     int Opcion;
+    string Usuario, Contraseña;
     do{
         cout<<"1 Ingresar."<<endl;
         cout<<"2 Registrarse."<<endl;
@@ -71,44 +71,38 @@ void Menu(string Usuario, string Contraseña){
 
 void MenuPr(string Usuario){
     int Opcion;
-    cout<<"\t\tBienvenid@"<<" "<<Usuario<<"."<<endl;
     do{
         cout<<"1: Crear una lista de alumnos."<<endl;
         cout<<"2: Eliminar una lista de alumnos."<<endl;
-        cout<<"3: Agregar un alumno."<<endl;
-        cout<<"4: Modificar datos de un alumno."<<endl;
-        cout<<"5: Quitar un alumno de la lista."<<endl;
-        cout<<"6: Mostrar datos de un alumno."<<endl;
-        cout<<"7: Mostrar lista completa."<<endl;
-        cout<<"8: Mostrar listas."<<endl;
-        cout<<"9: Salir."<<endl;
+        cout<<"3: Acceder a una lista (cargar alumnos, modificar, etc)"<<endl;
+        cout<<"4: Mostrar listas."<<endl;
+        cout<<"5: Cerrar sesion."<<endl;
         cin>>Opcion;
 
-        if(Opcion!=1 && Opcion!=2 && Opcion!=3 && Opcion!=4 && Opcion!=5 && Opcion!=6 && Opcion!=7 && Opcion!=8 && Opcion!=9){
+        if(Opcion!=1 && Opcion!=2 && Opcion!=3 && Opcion!=4 && Opcion!=5 && Opcion!=6 && Opcion!=7 && Opcion!=8 && Opcion!=9 && Opcion!=10){
             system("cls");
             cout<<"Opcion incorrecta."<<endl;
         }
-    }while(Opcion!=1 && Opcion!=2 && Opcion!=3 && Opcion!=4 && Opcion!=5 && Opcion!=6 && Opcion!=7 && Opcion!=8 && Opcion!=9);
+    }while(Opcion!=1 && Opcion!=2 && Opcion!=3 && Opcion!=4 && Opcion!=5 && Opcion!=6 && Opcion!=7 && Opcion!=8 && Opcion!=9 && Opcion!=10);
 
     switch(Opcion){
         case 1:
+            system("cls");
             Crearlista(Usuario);
             break;
         case 2:
+            system("cls");
+            EliminarLista(Usuario);
             break;
         case 3:
+            system("cls");
+            ModificarLista(Usuario);
             break;
         case 4:
             break;
         case 5:
-            break;
-        case 6:
-            break;
-        case 7:
-            break;
-        case 8:
-            break;
-        case 9:
+            system("cls");
+            Menu();
             break;
     }
 }
@@ -122,7 +116,7 @@ void Login(string Usuario, string Contraseña){
     if(Cuentas.fail()){ //Error que se muestra si no hay ninguna cuenta registrada
         system("cls");
         cout<<"Todavia no hay ninguna cuenta registrada."<<endl;
-        Menu(Usuario, Contraseña);
+        Menu();
     }else{
         cout<<"Usuario: "<<endl;
         cin>>Usuario;
@@ -157,6 +151,7 @@ void Login(string Usuario, string Contraseña){
                 cout<<"Logueo exitoso! entrando..."<<endl;
                 this_thread::sleep_for(chrono::seconds(3)); //Esperar 3 segundos para darle tiempo al usuario a leer "Logueo exitoso" antes del system cls
                 system("cls");
+                cout<<"\t\t Bienvenid@"<<" "<<Usuario<<endl;
                 MenuPr(Usuario);
             }else{
                 system("cls");
@@ -188,9 +183,10 @@ void Registro(string Usuario, string Contraseña){
     }else{
         fs::path fullpath= fs::path("Usuarios") / Usuario; //Guarda la direccion donde quiero crear las carpetas y el nombre en la variable fullpath
         Cuentas<<Usuario<<","<<Contraseña<<endl;
+        system("cls");
         cout<<"Usuario registrado con exito!"<<endl;
         fs::create_directory(fs::path(fullpath)); //Crea la carpeta del usuario donde va a tener sus listas.
-        Menu(Usuario, Contraseña);
+        Menu();
         Cuentas.close();
     }
     
